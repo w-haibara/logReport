@@ -6,12 +6,13 @@ import subprocess
 import subprocess
 
 def main():
-    print('start')
-    completed_process = subprocess.run(['bash', 'run.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print(f'returncode: {completed_process.returncode},stdout: {completed_process.stdout},stderr: {completed_process.stderr}')
-    print('end')
-
     slack = slackweb.Slack(url=tokenFile.token)
-    slack.notify(text="hello")
+    
+    completed_process = subprocess.run(['cat', './run.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    slack.notify(text=f"----------\n command: {completed_process.stdout}\n \n")
+
+    completed_process = subprocess.run(['bash', './run.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    slack.notify(text=f"returncode: {completed_process.returncode}\n stdout: {completed_process.stdout}\n stderr: {completed_process.stderr}\n ----------")
+    print(f'returncode: {completed_process.returncode}\n stdout: {completed_process.stdout}\n stderr: {completed_process.stderr}\n')
 
 main()
